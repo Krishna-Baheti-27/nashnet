@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NashNet · Policy Showdown</title>
+</head>
+<body>
+<x-screen>
+<x-head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+html{color-scheme:dark}
+body{margin:0;background:#0B0E14}
+*{scrollbar-width:thin;scrollbar-color:#2A3242 transparent}
+a{color:#AEB6C6}a:hover{color:#E6EAF2}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.4}
+button:focus-visible,a:focus-visible{outline:2px solid #6E8BFF;outline-offset:2px}
+</style>
+</x-head>
+<div style="min-height: 100vh; background: #0B0E14; color: #E6EAF2; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px">
+<div style="max-width: 1440px; margin: 0 auto; padding: 0 24px 48px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; padding: 18px 0; border-bottom: 1px solid #1E2635">
+  <div style="display: flex; align-items: center; gap: 12px">
+    <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; background: #E6EAF2; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#0B0E14" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="5" r="2.4"></circle><circle cx="15" cy="5" r="2.4"></circle><circle cx="10" cy="15" r="2.4"></circle><path d="M6.4 7.2l2.4 5.6M13.6 7.2l-2.4 5.6M7.6 5h4.8"></path></svg>
+    </div>
+    <div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.01em">NashNet</div>
+      <div style="font-size: 12px; color: #8A94A8">Compute Commons · multi-agent game theory testbed</div>
+    </div>
+  </div>
+  <nav aria-label="Views" style="display: flex; flex-wrap: wrap; gap: 4px; background: #121722; border: 1px solid #1E2635; border-radius: 12px; padding: 4px">
+    <a href="#/welcome" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">0 · Welcome</a>
+    <a href="#/world" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">1 · World</a>
+    <a href="#/showdown" aria-current="page" style="padding: 10px 14px; border-radius: 8px; background: #E6EAF2; color: #0B0E14; text-decoration: none; font-weight: 600; font-size: 13px">2 · Showdown</a>
+    <a href="#/lab" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">3 · Experiment Lab</a>
+  </nav>
+</header>
+
+<div style="margin: 22px 0 16px">
+  <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Policy Showdown: same world, four rule sets</h1>
+  <p style="margin: 6px 0 0; color: #AEB6C6; max-width: 900px">All four lanes start from the identical map, tenants and random seed. Only the platform’s rule differs, so any difference you see is caused by the rule. Press <strong style="color: #E6EAF2">Start the race</strong> and watch them pull apart.</p>
+</div>
+
+<section aria-label="Race controls" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 14px 16px; margin-bottom: 20px">
+  <button type="button" onClick="{{togglePlay}}" style="display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 22px; border-radius: 12px; border: 0; background: #E6EAF2; color: #0B0E14; font-weight: 700; font-size: 15px">
+    <sc-if value="{{playing}}"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1.5" width="3.5" height="11" rx="1"></rect><rect x="8.5" y="1.5" width="3.5" height="11" rx="1"></rect></svg></sc-if>
+    <sc-if value="{{paused}}"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.8v10.4a.6.6 0 00.9.5l8.4-5.2a.6.6 0 000-1L3.9 1.3a.6.6 0 00-.9.5z"></path></svg></sc-if>
+    {{playLabel}}
+  </button>
+  <button type="button" onClick="{{stepOnce}}" disabled="{{stepDisabled}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #2A3242; background: transparent; color: #E6EAF2">Step 1 tick</button>
+  <button type="button" onClick="{{jump}}" disabled="{{stepDisabled}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #2A3242; background: transparent; color: #E6EAF2">Skip to the end</button>
+  <button type="button" onClick="{{reset}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #2A3242; background: transparent; color: #E6EAF2">Restart</button>
+  <div role="group" aria-label="Speed" style="display: flex; gap: 2px; background: #0B0E14; border: 1px solid #1E2635; border-radius: 10px; padding: 3px">
+    <sc-for list="{{speeds}}" as="sp">
+      <button type="button" onClick="{{sp.pick}}" aria-pressed="{{sp.active}}" style="height: 38px; min-width: 52px; padding: 0 10px; border: 0; border-radius: 7px; background: {{sp.bg}}; color: {{sp.fg}}; font-size: 12px; font-weight: 500">{{sp.label}}</button>
+    </sc-for>
+  </div>
+  <span style="font-size: 13px; color: #AEB6C6; margin-left: 6px">Supply</span>
+  <div role="group" aria-label="Resource supply" style="display: flex; gap: 2px; background: #0B0E14; border: 1px solid #1E2635; border-radius: 10px; padding: 3px">
+    <sc-for list="{{scarcities}}" as="sx">
+      <button type="button" onClick="{{sx.pick}}" aria-pressed="{{sx.active}}" style="height: 38px; padding: 0 12px; border: 0; border-radius: 7px; background: {{sx.bg}}; color: {{sx.fg}}; font-size: 12px; font-weight: 500">{{sx.label}}</button>
+    </sc-for>
+  </div>
+  <span style="font-size: 13px; color: #AEB6C6; margin-left: 6px">Seed</span>
+  <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 10px; border-radius: 8px; background: #0B0E14; border: 1px solid #1E2635">{{seed}}</span>
+  <button type="button" onClick="{{newSeed}}" style="height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid #2A3242; background: transparent; color: #AEB6C6; font-size: 12px">New map</button>
+  <div style="margin-left: auto; min-width: 200px">
+    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8A94A8"><span>Season progress</span><span style="font-family: 'JetBrains Mono', monospace; color: #E6EAF2">tick {{tick}} / 150</span></div>
+    <div style="height: 6px; margin-top: 6px; border-radius: 3px; background: #1E2635; overflow: hidden"><div style="height: 100%; width: {{seasonPct}}%; background: #6E8BFF"></div></div>
+  </div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px">
+  <sc-for list="{{lanes}}" as="ln">
+    <section aria-label="{{ln.label}}" style="background: #121722; border: 1px solid #1E2635; border-top: 4px solid {{ln.color}}; border-radius: 16px; padding: 16px; min-width: 0">
+      <div style="display: flex; align-items: flex-start; gap: 10px">
+        <div style="min-width: 0">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: {{ln.color}}">LANE {{ln.n}} · {{ln.tag}}</div>
+          <h2 style="margin: 2px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700">{{ln.label}}</h2>
+          <div style="font-size: 12px; color: #8A94A8; margin-top: 2px; line-height: 1.4">{{ln.desc}}</div>
+        </div>
+        <div style="margin-left: auto; flex: none; text-align: center; padding: 6px 10px; border-radius: 10px; background: {{ln.rankBg}}; color: {{ln.rankFg}}">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em">RANK</div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; line-height: 1">#{{ln.rank}}</div>
+        </div>
+      </div>
+
+      <div role="img" aria-label="{{ln.mapAria}}" style="position: relative; width: 280px; height: 280px; margin: 14px auto 0; border-radius: 10px; overflow: hidden; background-color: #0E131C; background-image: linear-gradient(#161D2A 1px, transparent 1px), linear-gradient(90deg, #161D2A 1px, transparent 1px); background-size: 14px 14px; border: 1px solid #1E2635">
+        <sc-for list="{{ln.zones}}" as="z">
+          <div style="position: absolute; left: {{z.left}}px; top: {{z.top}}px; width: 12px; height: 12px; border-radius: 3px; background: {{z.bg}}"></div>
+        </sc-for>
+        <sc-for list="{{ln.agents}}" as="ag">
+          <div style="position: absolute; left: {{ag.left}}px; top: {{ag.top}}px; width: 12px; height: 12px; border-radius: 50%; background: {{ag.bg}}; box-shadow: 0 0 0 1.5px #0E131C; transition: left .25s, top .25s"></div>
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 14px">
+        <div style="padding: 8px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-size: 10px; color: #8A94A8">Online</div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">{{ln.online}}<span style="font-size: 12px; color: #8A94A8">/10</span></div>
+        </div>
+        <div style="padding: 8px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-size: 10px; color: #8A94A8">Jobs served</div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">{{ln.served}}%</div>
+        </div>
+        <div style="padding: 8px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-size: 10px; color: #8A94A8">Cheating pays?</div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: {{ln.cheatColor}}">{{ln.cheat}}</div>
+        </div>
+      </div>
+      <div style="margin-top: 10px">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8A94A8"><span>Zone reserves</span><span style="font-family: 'JetBrains Mono', monospace">{{ln.reserve}}%</span></div>
+        <div style="position: relative; height: 8px; margin-top: 4px; border-radius: 4px; background: #1E2635; overflow: hidden"><div style="height: 100%; width: {{ln.reserve}}%; background: {{ln.reserveColor}}; transition: width .25s"></div><div style="position: absolute; top: 0; bottom: 0; left: 40%; width: 2px; background: #E6EAF2; opacity: .6"></div></div>
+      </div>
+      <div style="margin-top: 10px; min-height: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 11px; color: #8A94A8">
+        <span>Went offline:</span>
+        <sc-if value="{{ln.noneDead}}"><span style="color: #2DD4A7">nobody yet</span></sc-if>
+        <sc-for list="{{ln.dead}}" as="d">
+          <span title="{{d.title}}" style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 6px; background: #0B0E14; border: 1px solid #1E2635; color: #E6EAF2"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{d.color}}"></span>{{d.id}}</span>
+        </sc-for>
+      </div>
+      <div style="margin-top: 10px; padding: 6px 10px; border-radius: 8px; text-align: center; font-weight: 600; font-size: 13px; background: {{ln.healthBg}}; color: {{ln.healthColor}}">Commons: {{ln.health}}</div>
+    </section>
+  </sc-for>
+</div>
+
+<section aria-label="Race charts" style="margin-top: 20px; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 18px">
+  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; margin-bottom: 14px">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A94A8">THE RACE OVER TIME · x-axis = tick (0–150)</span>
+    <span style="margin-left: auto; display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px">
+      <sc-for list="{{lanes}}" as="ln">
+        <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 3px; background: {{ln.color}}"></span>{{ln.label}}</span>
+      </sc-for>
+    </span>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px">
+    <sc-for list="{{charts}}" as="ch">
+      <div style="min-width: 0">
+        <div style="font-weight: 600">{{ch.title}}</div>
+        <div style="font-size: 12px; color: #8A94A8; margin-top: 2px">{{ch.sub}}</div>
+        <div style="display: flex; gap: 8px; margin-top: 10px">
+          <div style="width: 34px; height: 150px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #7D8799; text-align: right"><span>{{ch.top}}</span><span>{{ch.mid}}</span><span>{{ch.bottom}}</span></div>
+          <div style="flex: 1; min-width: 0">
+            <svg viewBox="0 0 600 150" preserveAspectRatio="none" width="100%" height="150" role="img" aria-label="{{ch.aria}}" style="display: block; background: #0B0E14; border-radius: 6px">
+              <line x1="0" y1="{{ch.refY}}" x2="600" y2="{{ch.refY}}" stroke="#3A4458" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"></line>
+              <polyline points="{{ch.p0}}" fill="none" stroke="#8A94A8" stroke-width="2.2" vector-effect="non-scaling-stroke"></polyline>
+              <polyline points="{{ch.p1}}" fill="none" stroke="#6E8BFF" stroke-width="2.2" vector-effect="non-scaling-stroke"></polyline>
+              <polyline points="{{ch.p2}}" fill="none" stroke="#E9A23B" stroke-width="2.2" vector-effect="non-scaling-stroke"></polyline>
+              <polyline points="{{ch.p3}}" fill="none" stroke="#2DD4A7" stroke-width="2.2" vector-effect="non-scaling-stroke"></polyline>
+            </svg>
+            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #7D8799"><span>0</span><span>{{ch.refLabel}}</span><span>150</span></div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section aria-label="Ranking" style="margin-top: 20px; background: #121722; border: 1px solid {{rankBorder}}; border-radius: 16px; padding: 20px">
+  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A94A8">{{rankTitle}}</span>
+    <span style="font-size: 12px; color: #8A94A8">Ranked by tenants online, then by jobs served</span>
+  </div>
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-top: 16px">
+    <sc-for list="{{podium}}" as="pd">
+      <div style="flex: 1 1 200px; min-width: 0">
+        <div style="text-align: center; font-size: 13px; font-weight: 600; margin-bottom: 6px">{{pd.label}}</div>
+        <div style="height: {{pd.h}}px; border-radius: 10px 10px 0 0; background: {{pd.bg}}; border: 1px solid {{pd.color}}; border-bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: {{pd.color}}">#{{pd.rank}}</span>
+          <span style="font-size: 12px; color: #D4D9E3">{{pd.line}}</span>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="height: 2px; background: #2A3242"></div>
+  <p style="margin: 16px 0 0; font-size: 16px; line-height: 1.55; color: #E6EAF2">{{takeaway}}</p>
+  <p style="margin: 6px 0 0; font-size: 13px; color: #8A94A8">One seed is one story. Press “New map” to try a different world, then use the <a href="#/lab">Experiment Lab</a> to average hundreds of seeds with confidence intervals.</p>
+</section>
+
+</div>
+</div>
+</x-screen>
+<script type="text/x-screen">
+class Component extends Screen {
+  eng() {
+    return this._E || (this._E = makeEngine());
+  }
+  lanesDef() {
+    return [
+      { k: 'none', label: 'No rules', tag: 'BASELINE', desc: 'Tenants forget every encounter; zones are a free-for-all.', regs: { memory: false }, color: '#8A94A8' },
+      { k: 'rep', label: 'Memory + reputation', tag: 'FIXES CHEATING', desc: 'Tenants remember cheaters and check a public trust score.', regs: { memory: true, ledger: true }, color: '#6E8BFF' },
+      { k: 'quota', label: 'Commons quotas', tag: 'FIXES DRAINING', desc: 'Max 3 units per take; nobody drains a zone below 40%.', regs: { memory: false, quotas: true }, color: '#E9A23B' },
+      { k: 'audit', label: 'Random audits', tag: 'FIXES BOTH', desc: 'Cheats and over-drains caught 40% of the time: fine + repayment.', regs: { memory: false, audits: true }, color: '#2DD4A7' }
+    ];
+  }
+  cfg() {
+    const s = this.state || {};
+    return { playing: !!s.playing, speed: s.speed || 2, scarcity: s.scarcity || 'shortage', seed: s.seed || 166 };
+  }
+  ensure() {
+    const c = this.cfg();
+    const key = c.seed + '|' + c.scarcity;
+    if (!this.sims || this.simKey !== key) {
+      const E = this.eng();
+      this.sims = this.lanesDef().map(l => E.create({ seed: c.seed, scarcity: c.scarcity, regs: l.regs }));
+      this.simKey = key;
+    }
+    return this.sims;
+  }
+  stepAll() { const E = this.eng(); this.sims.forEach(S => { if (S.tick < 150) E.step(S); }); }
+  componentDidMount() { this.loop(); }
+  componentWillUnmount() { this.dead = true; clearTimeout(this.timer); }
+  loop() {
+    if (this.dead) return;
+    const c = this.cfg();
+    if (c.playing && this.sims) {
+      if (this.sims[0].tick >= 150) this.setState({ playing: false });
+      else { this.stepAll(); this.forceUpdate(); }
+    }
+    const delay = c.speed === 4 ? 40 : c.speed === 2 ? 120 : 300;
+    this.timer = setTimeout(() => this.loop(), delay);
+  }
+  renderVals() {
+    const E = this.eng();
+    const sims = this.ensure();
+    const c = this.cfg();
+    const set = p => this.setState(p);
+    const ST = E.STRATS;
+    const defs = this.lanesDef();
+    const ZC = { compute: 'rgba(233,162,59,', bw: 'rgba(56,189,248,', power: 'rgba(155,225,93,' };
+    const tick = sims[0].tick;
+    const over = tick >= 150;
+
+    const sums = sims.map(S => E.summary(S));
+    const order = sums.map((s, i) => i).sort((a, b) => (sums[b].online - sums[a].online) || (sums[b].served - sums[a].served));
+    const rankOf = {}; order.forEach((i, r) => { rankOf[i] = r + 1; });
+
+    const lanes = defs.map((d, i) => {
+      const S = sims[i], sm = sums[i];
+      const adv = Math.round(sm.cheatAdv * 100);
+      const hs = 0.5 * sm.online / 10 + 0.5 * Math.min(1, sm.reserve / 0.6);
+      const hc = hs >= 0.8 ? ['Healthy', '#2DD4A7', 'rgba(45,212,167,0.12)'] : hs >= 0.55 ? ['Strained', '#F2B862', 'rgba(233,162,59,0.12)'] : ['Collapsing', '#FF8A6B', 'rgba(255,107,74,0.12)'];
+      const rank = rankOf[i];
+      const dead = S.agents.filter(a => !a.online).map(a => ({ id: a.id, color: ST[a.strat].color, title: a.id + ' · the ' + ST[a.strat].short + ' · offline at tick ' + a.diedAt }));
+      return {
+        n: i + 1, label: d.label, tag: d.tag, desc: d.desc, color: d.color,
+        rank: rank, rankBg: rank === 1 && tick > 0 ? d.color : '#0B0E14', rankFg: rank === 1 && tick > 0 ? '#0B0E14' : '#AEB6C6',
+        zones: S.zones.map(z => ({ left: z.x * 14 + 1, top: z.y * 14 + 1, bg: ZC[z.type] + (0.15 + 0.75 * Math.max(0, z.amt) / z.max).toFixed(2) + ')' })),
+        agents: S.agents.map(a => ({ left: a.x * 14 + 1, top: a.y * 14 + 1, bg: a.online ? ST[a.strat].color : '#3A4458' })),
+        mapAria: d.label + ' lane map: ' + sm.online + ' of 10 tenants online',
+        online: sm.online, served: Math.round(sm.served * 100), reserve: Math.round(sm.reserve * 100),
+        reserveColor: sm.reserve >= 0.4 ? '#9BE15D' : '#FF6B4A',
+        cheat: tick === 0 ? '–' : adv > 5 ? 'Yes +' + adv + '%' : adv < -5 ? 'No ' + adv + '%' : 'Even',
+        cheatColor: tick === 0 ? '#AEB6C6' : adv > 5 ? '#FF8A6B' : '#2DD4A7',
+        dead: dead, noneDead: dead.length === 0,
+        health: hc[0], healthColor: hc[1], healthBg: hc[2]
+      };
+    });
+
+    const pts = (arr, min, max) => arr.length ? arr.map((v, i) => ((i + 1) * 4).toFixed(1) + ',' + (146 - (v - min) / (max - min) * 142).toFixed(1)).join(' ') : '0,146';
+    const advSeries = sims.map(S => S.hist.coopTeam.map((ct, i) => Math.max(-100, Math.min(150, (S.hist.selfTeam[i] / Math.max(1, ct) - 1) * 100))));
+    const charts = [
+      { title: 'Tenants online', sub: 'How many of the 10 tenants are still running', top: '10', mid: '5', bottom: '0', refY: 146 - 0.5 * 142, refLabel: 'dashed = half the tenants', aria: 'Tenants online per lane over the season',
+        p0: pts(sims[0].hist.online, 0, 10), p1: pts(sims[1].hist.online, 0, 10), p2: pts(sims[2].hist.online, 0, 10), p3: pts(sims[3].hist.online, 0, 10) },
+      { title: 'Does cheating pay?', sub: 'Selfish tenants’ extra earnings vs cooperative tenants (%)', top: '+150%', mid: '+25%', bottom: '−100%', refY: 146 - (0 + 100) / 250 * 142, refLabel: 'dashed = 0%: cheating breaks even', aria: 'Selfish advantage per lane over the season',
+        p0: pts(advSeries[0], -100, 150), p1: pts(advSeries[1], -100, 150), p2: pts(advSeries[2], -100, 150), p3: pts(advSeries[3], -100, 150) },
+      { title: 'Commons reserves', sub: 'Average capacity left in the zones', top: '100%', mid: '50%', bottom: '0%', refY: 146 - 0.4 * 142, refLabel: 'dashed = 40% safe reserve', aria: 'Average zone reserves per lane over the season',
+        p0: pts(sims[0].hist.reserve, 0, 1), p1: pts(sims[1].hist.reserve, 0, 1), p2: pts(sims[2].hist.reserve, 0, 1), p3: pts(sims[3].hist.reserve, 0, 1) }
+    ];
+
+    const heights = [150, 118, 92, 70];
+    const podium = [order[1], order[0], order[2], order[3]].map(i => {
+      const r = rankOf[i];
+      return { label: defs[i].label, rank: r, color: defs[i].color, h: heights[r - 1], bg: r === 1 ? 'rgba(230,234,242,0.08)' : '#0B0E14', line: sums[i].online + '/10 online · ' + Math.round(sums[i].served * 100) + '% jobs' };
+    });
+    const best = order[0];
+    let takeaway;
+    if (tick === 0) takeaway = 'Press “Start the race”. The ranking updates live as the season plays out.';
+    else {
+      const b = sums[best], n = sums[0];
+      const advB = Math.round(b.cheatAdv * 100), advN = Math.round(n.cheatAdv * 100);
+      takeaway = (over ? 'Result: ' : 'So far: ') + defs[best].label + ' leads with ' + b.online + '/10 tenants online' +
+        (best !== 0 ? ', versus ' + n.online + '/10 with no rules' : '') + '. ' +
+        'With no rules, selfish tenants earn ' + (advN >= 0 ? '+' : '') + advN + '% vs cooperators' +
+        (best !== 0 ? '; under ' + defs[best].label.toLowerCase() + ' that becomes ' + (advB >= 0 ? '+' : '') + advB + '%.' : '.');
+    }
+    const pill = a => ({ bg: a ? '#E6EAF2' : 'transparent', fg: a ? '#0B0E14' : '#AEB6C6' });
+    return {
+      playing: c.playing, paused: !c.playing,
+      playLabel: c.playing ? 'Pause' : over ? 'Season over' : tick === 0 ? 'Start the race' : 'Resume',
+      togglePlay: () => { if (!over) set({ playing: !c.playing }); },
+      stepOnce: () => { if (!this.cfg().playing && !over) { this.stepAll(); this.forceUpdate(); } },
+      jump: () => { while (this.sims[0].tick < 150) this.stepAll(); set({ playing: false }); },
+      stepDisabled: c.playing || over,
+      reset: () => { this.simKey = null; set({ playing: false }); },
+      newSeed: () => set({ seed: c.seed + 1, playing: false }),
+      speeds: [[1, 'Slow'], [2, 'Normal'], [4, 'Fast']].map(v => Object.assign({ label: v[1], active: c.speed === v[0], pick: () => set({ speed: v[0] }) }, pill(c.speed === v[0]))),
+      scarcities: ['abundant', 'normal', 'shortage'].map(k => Object.assign({ label: E.SCARCITY[k].label, active: c.scarcity === k, pick: () => set({ scarcity: k, playing: false }) }, pill(c.scarcity === k))),
+      seed: c.seed, tick: String(tick).padStart(3, '0'), seasonPct: Math.round(tick / 1.5),
+      lanes: lanes, charts: charts, podium: podium, takeaway: takeaway,
+      rankTitle: over ? 'FINAL RANKING · TICK 150' : 'LIVE RANKING · TICK ' + tick,
+      rankBorder: over ? '#E6EAF2' : '#1E2635'
+    };
+  }
+}
+</script>
+</body>
+</html>

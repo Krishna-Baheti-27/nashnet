@@ -1,0 +1,22 @@
+{
+  "name": "nashnet",
+  "version": "1.0.0",
+  "description": "Game-theoretic agent-based testbed for mechanism design in shared AI compute commons",
+  "license": "MIT",
+  "author": "Krishna Baheti, Divam Shah",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Krishna-Baheti-27/nashnet.git"
+  },
+  "main": "engine/engine.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "check": "node scripts/check.js",
+    "experiments": "node scripts/run-experiments.js --seeds 100",
+    "analyze": "python3 scripts/analysis/analyze.py",
+    "test": "node scripts/check.js"
+  }
+}

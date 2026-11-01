@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NashNet · Experiment Lab</title>
+</head>
+<body>
+<x-screen>
+<x-head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+html{color-scheme:dark}
+body{margin:0;background:#0B0E14}
+*{scrollbar-width:thin;scrollbar-color:#2A3242 transparent}
+a{color:#AEB6C6}a:hover{color:#E6EAF2}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:progress;opacity:.55}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #6E8BFF;outline-offset:2px}
+</style>
+</x-head>
+<div style="min-height: 100vh; background: #0B0E14; color: #E6EAF2; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px">
+<div style="max-width: 1440px; margin: 0 auto; padding: 0 24px 48px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; padding: 18px 0; border-bottom: 1px solid #1E2635">
+  <div style="display: flex; align-items: center; gap: 12px">
+    <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; background: #E6EAF2; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#0B0E14" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="5" r="2.4"></circle><circle cx="15" cy="5" r="2.4"></circle><circle cx="10" cy="15" r="2.4"></circle><path d="M6.4 7.2l2.4 5.6M13.6 7.2l-2.4 5.6M7.6 5h4.8"></path></svg>
+    </div>
+    <div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.01em">NashNet</div>
+      <div style="font-size: 12px; color: #8A94A8">Compute Commons · multi-agent game theory testbed</div>
+    </div>
+  </div>
+  <nav aria-label="Views" style="display: flex; flex-wrap: wrap; gap: 4px; background: #121722; border: 1px solid #1E2635; border-radius: 12px; padding: 4px">
+    <a href="#/welcome" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">0 · Welcome</a>
+    <a href="#/world" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">1 · World</a>
+    <a href="#/showdown" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">2 · Showdown</a>
+    <a href="#/lab" aria-current="page" style="padding: 10px 14px; border-radius: 8px; background: #E6EAF2; color: #0B0E14; text-decoration: none; font-weight: 600; font-size: 13px">3 · Experiment Lab</a>
+  </nav>
+</header>
+
+<div style="margin: 22px 0 16px">
+  <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Experiment Lab: is the result real, or just one lucky map?</h1>
+  <p style="margin: 6px 0 0; color: #AEB6C6; max-width: 900px">One run is a story; many runs are evidence. This page really runs the simulation in your browser: 8 rule sets × 3 supply levels × many seeds, then reports means with 95% confidence intervals.</p>
+</div>
+
+<section aria-label="Batch controls" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 16px 18px">
+  <div style="min-width: 220px; flex: 0 1 280px">
+    <div style="display: flex; align-items: baseline"><label for="seeds" style="font-weight: 600">Seeds per condition</label><span style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 15px">{{seeds}}</span></div>
+    <input id="seeds" type="range" min="10" max="60" step="5" value="{{seeds}}" onInput="{{changeSeeds}}" disabled="{{running}}" style="width: 100%; accent-color: #6E8BFF; margin-top: 6px">
+    <div style="font-size: 11px; color: #8A94A8">More seeds = narrower confidence intervals</div>
+  </div>
+  <button type="button" onClick="{{run}}" disabled="{{running}}" style="height: 52px; padding: 0 24px; border-radius: 12px; border: 0; background: #E6EAF2; color: #0B0E14; font-weight: 700; font-size: 15px">{{runLabel}}</button>
+  <div style="flex: 1 1 320px; min-width: 0">
+    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #AEB6C6"><span>{{doneRuns}} of {{totalRuns}} simulations finished</span><span style="font-family: 'JetBrains Mono', monospace">{{progress}}%</span></div>
+    <div style="height: 8px; margin-top: 6px; border-radius: 4px; background: #1E2635; overflow: hidden"><div style="height: 100%; width: {{progress}}%; background: #2DD4A7"></div></div>
+    <div style="font-size: 11px; color: #8A94A8; margin-top: 6px">Each simulation: 10 tenants, 150 ticks. Every rule set uses the same seeds, so they face identical maps (a paired design).</div>
+  </div>
+</section>
+
+<sc-if value="{{hasResults}}">
+<section aria-label="Headline result" style="margin-top: 20px; padding: 20px 22px; border-radius: 16px; background: rgba(45,212,167,0.07); border: 1px solid rgba(45,212,167,0.4)">
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #2DD4A7">HEADLINE · {{scName}} SUPPLY · n = {{nShown}} SEEDS EACH</div>
+  <div style="margin-top: 6px; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; line-height: 1.3">{{headline}}</div>
+  <div style="margin-top: 6px; color: #D4D9E3">{{headline2}}</div>
+</section>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px">
+  <div role="tablist" aria-label="Metric" style="display: flex; flex-wrap: wrap; gap: 2px; background: #121722; border: 1px solid #1E2635; border-radius: 12px; padding: 4px">
+    <sc-for list="{{metrics}}" as="mt">
+      <button type="button" role="tab" aria-selected="{{mt.active}}" onClick="{{mt.pick}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: {{mt.bg}}; color: {{mt.fg}}; font-size: 13px; font-weight: 500">{{mt.label}}</button>
+    </sc-for>
+  </div>
+  <span style="font-size: 13px; color: #AEB6C6; margin-left: 8px">Supply</span>
+  <div role="group" aria-label="Supply level shown" style="display: flex; gap: 2px; background: #121722; border: 1px solid #1E2635; border-radius: 12px; padding: 4px">
+    <sc-for list="{{scTabs}}" as="sx">
+      <button type="button" onClick="{{sx.pick}}" aria-pressed="{{sx.active}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: {{sx.bg}}; color: {{sx.fg}}; font-size: 13px; font-weight: 500">{{sx.label}}</button>
+    </sc-for>
+  </div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 16px; align-items: flex-start">
+  <section aria-label="Results by rule set" style="flex: 999 1 720px; min-width: 0; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px">
+      <span style="font-weight: 600; font-size: 16px">{{chartTitle}}</span>
+      <span style="font-size: 12px; color: #8A94A8">{{chartSub}}</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; font-size: 12px; color: #AEB6C6">
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #AEB6C6; opacity: .6"></span>one seed (one simulated season)</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #E6EAF2"></span>mean</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 22px; height: 3px; background: #E6EAF2"></span>95% confidence interval</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 0; height: 12px; border-left: 2px dashed #8A94A8"></span>“No rules” baseline</span>
+    </div>
+
+    <div style="margin-top: 16px; overflow-x: auto">
+      <div style="min-width: 640px">
+        <sc-for list="{{rows}}" as="rw">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 6px 0; border-top: 1px solid #1E2635">
+            <div style="width: 190px; flex: none">
+              <div style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: {{rw.color}}"></span><span style="font-weight: 600; font-size: 13px">{{rw.label}}</span></div>
+              <div style="font-size: 11px; color: #8A94A8; margin-left: 18px">{{rw.family}}</div>
+            </div>
+            <div style="position: relative; flex: 1; height: 40px; border-radius: 6px; background: #0B0E14">
+              <div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{baseX}}%; border-left: 2px dashed #5C667A"></div>
+              <sc-for list="{{rw.dots}}" as="d">
+                <div style="position: absolute; left: calc({{d.x}}% - 3.5px); top: {{d.y}}px; width: 7px; height: 7px; border-radius: 50%; background: {{rw.color}}; opacity: .45"></div>
+              </sc-for>
+              <div style="position: absolute; top: 18px; left: {{rw.ciL}}%; width: {{rw.ciW}}%; height: 4px; border-radius: 2px; background: #E6EAF2"></div>
+              <div style="position: absolute; top: 13px; left: calc({{rw.meanX}}% - 7px); width: 14px; height: 14px; border-radius: 3px; background: #E6EAF2; box-shadow: 0 0 0 2px #0B0E14"></div>
+            </div>
+            <div style="width: 120px; flex: none; text-align: right">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600">{{rw.mean}}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A94A8">± {{rw.ci}}</div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 12px; border-top: 1px solid #2A3242; padding-top: 6px">
+          <div style="width: 190px; flex: none"></div>
+          <div style="position: relative; flex: 1; height: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #7D8799">
+            <sc-for list="{{ticks}}" as="tk">
+              <span style="position: absolute; left: {{tk.x}}%; transform: translateX(-50%)">{{tk.label}}</span>
+            </sc-for>
+          </div>
+          <div style="width: 120px; flex: none"></div>
+        </div>
+        <div style="text-align: center; font-size: 12px; color: #8A94A8; margin-top: 6px">{{axisTitle}}</div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Supply heatmap" style="flex: 1 1 380px; min-width: 0; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+    <div style="font-weight: 600; font-size: 16px">Does the rule hold up when supply gets scarce?</div>
+    <div style="font-size: 12px; color: #8A94A8; margin-top: 2px">{{heatSub}}</div>
+    <div style="display: grid; grid-template-columns: 150px repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 14px; font-size: 12px">
+      <span></span>
+      <span style="text-align: center; color: #AEB6C6; padding-bottom: 4px">Abundant</span>
+      <span style="text-align: center; color: #AEB6C6; padding-bottom: 4px">Normal</span>
+      <span style="text-align: center; color: #AEB6C6; padding-bottom: 4px">Shortage</span>
+      <sc-for list="{{heat}}" as="hr">
+        <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; padding-right: 4px"><span style="width: 8px; height: 8px; border-radius: 2px; background: {{hr.color}}"></span>{{hr.label}}</span>
+        <sc-for list="{{hr.cells}}" as="cl">
+          <span style="display: flex; align-items: center; justify-content: center; height: 36px; border-radius: 6px; background: {{cl.bg}}; color: {{cl.fg}}; font-family: 'JetBrains Mono', monospace; font-weight: 600; outline: {{cl.outline}}; outline-offset: -2px">{{cl.text}}</span>
+        </sc-for>
+      </sc-for>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 11px; color: #8A94A8">
+      <span>worse</span>
+      <span style="flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, rgba(45,212,167,0.08), rgba(45,212,167,0.9))"></span>
+      <span>better</span>
+    </div>
+    <div style="font-size: 11px; color: #8A94A8; margin-top: 6px">White outline = the supply level selected on the left.</div>
+  </section>
+</div>
+
+<section aria-label="Full results table" style="margin-top: 20px; background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 10px">
+    <span style="font-weight: 600; font-size: 16px">All metrics · {{scNameLower}} supply</span>
+    <span style="font-size: 12px; color: #8A94A8">mean ± 95% CI over {{nShown}} seeds · best value in each column highlighted</span>
+  </div>
+  <div style="overflow-x: auto">
+    <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 13px">
+      <thead>
+        <tr style="text-align: left; color: #8A94A8">
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242">Rule set</th>
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242; text-align: right">Tenants online ↑</th>
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242; text-align: right">Jobs served ↑</th>
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242; text-align: right">Cheater advantage ↓</th>
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242; text-align: right">Cooperation ↑</th>
+          <th style="padding: 10px 8px; font-weight: 500; border-bottom: 1px solid #2A3242; text-align: right">Inequality (Gini) ↓</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{table}}" as="tr">
+          <tr>
+            <td style="padding: 10px 8px; border-bottom: 1px solid #1E2635"><span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: {{tr.color}}"></span>{{tr.label}}</span></td>
+            <sc-for list="{{tr.cells}}" as="td">
+              <td style="padding: 10px 8px; border-bottom: 1px solid #1E2635; text-align: right; font-family: 'JetBrains Mono', monospace; color: {{td.fg}}; font-weight: {{td.weight}}">{{td.text}}</td>
+            </sc-for>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin: 14px 0 0; font-size: 12px; color: #8A94A8; line-height: 1.5">Method: each seed generates one map and one season of 150 ticks with 10 tenants (2 Mirrors, 2 Givers, 2 Traders, 1 Checker, 2 Hoarders, 1 Grabber). Rule sets share seeds 1…n. 95% CI = mean ± 1.96 · SD / √n. Cheater advantage = selfish tenants’ average credits ÷ cooperative tenants’ average credits − 1.</p>
+</section>
+
+</div>
+</div>
+</x-screen>
+<script type="text/x-screen">
+class Component extends Screen {
+  eng() {
+    return this._E || (this._E = makeEngine());
+  }
+  conds() {
+    return [
+      { k: 'none', label: 'No rules', family: 'baseline', regs: { memory: false }, color: '#8A94A8' },
+      { k: 'memory', label: 'Memory only', family: 'targets cheating', regs: { memory: true }, color: '#9DB0FF' },
+      { k: 'rep', label: 'Memory + reputation', family: 'targets cheating', regs: { memory: true, ledger: true }, color: '#6E8BFF' },
+      { k: 'quota', label: 'Commons quotas', family: 'targets draining', regs: { memory: false, quotas: true }, color: '#E9A23B' },
+      { k: 'pricing', label: 'Congestion pricing', family: 'targets draining', regs: { memory: false, pricing: true }, color: '#C98A2E' },
+      { k: 'audit', label: 'Random audits', family: 'targets both', regs: { memory: false, audits: true }, color: '#2DD4A7' },
+      { k: 'repaudit', label: 'Reputation + audits', family: 'combination', regs: { memory: true, ledger: true, audits: true }, color: '#1FA383' },
+      { k: 'all', label: 'Everything on', family: 'combination', regs: { memory: true, ledger: true, audits: true, quotas: true, pricing: true }, color: '#E6EAF2' }
+    ];
+  }
+  one(seed, sc, regs) {
+    var m = this.eng().run({ seed: seed, scarcity: sc, regs: regs });
+    return { online: m.survival * 100, served: m.served * 100, cheat: m.cheatAdv * 100, coop: m.coop * 100, gini: m.gini };
+  }
+  componentDidMount() { this.startRun(40); }
+  componentWillUnmount() { this.dead = true; clearTimeout(this.timer); }
+  startRun(seeds) {
+    const conds = this.conds();
+    const SCS = ['abundant', 'normal', 'shortage'];
+    const queue = [];
+    SCS.forEach(sc => conds.forEach(c => { for (let s = 1; s <= seeds; s++) queue.push([sc, c.k, c.regs, s]); }));
+    this.res = {}; SCS.forEach(sc => { this.res[sc] = {}; conds.forEach(c => { this.res[sc][c.k] = []; }); });
+    this.queue = queue; this.total = queue.length; this.done = 0; this.runSeeds = seeds;
+    this.setState({ running: true });
+    clearTimeout(this.timer);
+    const work = () => {
+      if (this.dead) return;
+      const E = this.eng();
+      const t0 = Date.now();
+      while (this.queue.length && Date.now() - t0 < 30) {
+        const q = this.queue.shift();
+        this.res[q[0]][q[1]].push(this.one(q[3], q[0], q[2]));
+        this.done++;
+      }
+      if (this.queue.length) { this.forceUpdate(); this.timer = setTimeout(work, 0); }
+      else { this.setState({ running: false }); }
+    };
+    this.timer = setTimeout(work, 30);
+  }
+  renderVals() {
+    const s = this.state || {};
+    const set = p => this.setState(p);
+    const seeds = s.seeds ?? 40;
+    const running = !!s.running;
+    const metric = s.metric || 'online';
+    const sc = s.sc || 'shortage';
+    const conds = this.conds();
+    const SCN = { abundant: 'Abundant', normal: 'Normal', shortage: 'Shortage' };
+    const MET = {
+      online: { label: 'Tenants online', title: 'Tenants still online after 150 ticks', sub: 'percent of the 10 tenants · higher is better', unit: '%', good: 1, fmt: v => v.toFixed(0) + '%', ci: v => v.toFixed(1), axis: 'Tenants online at the end of the season (%)' },
+      served: { label: 'Jobs served', title: 'Share of AI jobs that got computed', sub: 'percent of incoming demand · higher is better', unit: '%', good: 1, fmt: v => v.toFixed(1) + '%', ci: v => v.toFixed(1), axis: 'Jobs served (%)' },
+      cheat: { label: 'Does cheating pay?', title: 'Cheater advantage', sub: 'selfish earnings vs cooperative earnings · lower is better, below 0% means cheating loses', unit: '%', good: -1, fmt: v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%', ci: v => v.toFixed(1), axis: 'Selfish tenants’ extra earnings over cooperative tenants (%)' },
+      coop: { label: 'Cooperation', title: 'Cooperation rate in encounters', sub: 'share of encounter moves that were “share” · context metric', unit: '%', good: 1, fmt: v => v.toFixed(0) + '%', ci: v => v.toFixed(1), axis: 'Cooperative moves (%)' },
+      gini: { label: 'Inequality', title: 'Inequality of final credits', sub: 'Gini coefficient, 0 = perfectly equal · lower is better', unit: '', good: -1, fmt: v => v.toFixed(2), ci: v => v.toFixed(3), axis: 'Gini coefficient of credits' }
+    };
+    const m = MET[metric];
+    const R = this.res || {};
+    const stats = arr => {
+      const n = arr.length; if (!n) return { mean: 0, ci: 0, n: 0 };
+      const mean = arr.reduce((p, q) => p + q, 0) / n;
+      const sd = n > 1 ? Math.sqrt(arr.reduce((p, q) => p + (q - mean) * (q - mean), 0) / (n - 1)) : 0;
+      return { mean: mean, ci: 1.96 * sd / Math.sqrt(n), n: n };
+    };
+    const vals = (scx, k, mk) => ((R[scx] || {})[k] || []).map(o => o[mk]);
+    const hasResults = !!(R[sc] && R[sc].none && R[sc].none.length && !running);
+
+    const allVals = [];
+    conds.forEach(cd => vals(sc, cd.k, metric).forEach(v => allVals.push(v)));
+    let lo = allVals.length ? Math.min.apply(null, allVals) : 0, hi = allVals.length ? Math.max.apply(null, allVals) : 100;
+    if (metric === 'online' || metric === 'coop') { lo = Math.min(lo, 0); hi = 100; }
+    if (metric === 'served') { hi = 100; lo = Math.max(0, Math.floor(lo / 5) * 5 - 5); }
+    if (metric === 'cheat') { lo = Math.floor(Math.min(lo, -10) / 25) * 25; hi = Math.ceil(Math.max(hi, 10) / 25) * 25; }
+    if (metric === 'gini') { lo = 0; hi = Math.max(0.1, Math.ceil(hi * 10) / 10); }
+    const X = v => Math.max(0, Math.min(100, 100 * (v - lo) / (hi - lo || 1)));
+
+    const st = {}; conds.forEach(cd => { st[cd.k] = stats(vals(sc, cd.k, metric)); });
+    const sorted = conds.slice().sort((a, b) => m.good * (st[b.k].mean - st[a.k].mean));
+    const rows = sorted.map(cd => {
+      const v = vals(sc, cd.k, metric); const q = st[cd.k];
+      return {
+        label: cd.label, family: cd.family, color: cd.color,
+        dots: v.map((x, i) => ({ x: X(x).toFixed(2), y: 4 + ((i * 37) % 9) * 3.6 })),
+        meanX: X(q.mean).toFixed(2), ciL: X(q.mean - q.ci).toFixed(2), ciW: Math.max(0.5, X(q.mean + q.ci) - X(q.mean - q.ci)).toFixed(2),
+        mean: q.n ? m.fmt(q.mean) : '–', ci: q.n ? m.ci(q.ci) : '–'
+      };
+    });
+    const ticks = [];
+    for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; ticks.push({ x: (i * 25), label: metric === 'gini' ? v.toFixed(2) : (metric === 'cheat' && v > 0 ? '+' : '') + Math.round(v) + m.unit }); }
+
+    const best = sorted[0];
+    const base = st.none, bestS = st[best.k];
+    const surv = k => stats(vals(sc, k, 'online'));
+    const cheat = k => stats(vals(sc, k, 'cheat'));
+    const bestSurvK = conds.slice().sort((a, b) => surv(b.k).mean - surv(a.k).mean)[0];
+    const bs = surv(bestSurvK.k), ns = surv('none');
+    const clear = bs.mean - bs.ci > ns.mean + ns.ci;
+    const headline = hasResults ? bestSurvK.label + ' keeps ' + bs.mean.toFixed(0) + '% of tenants online, versus ' + ns.mean.toFixed(0) + '% with no rules (' + (bs.mean - ns.mean >= 0 ? '+' : '') + (bs.mean - ns.mean).toFixed(0) + ' points).' : 'Running simulations…';
+    const cb = cheat(bestSurvK.k), cn = cheat('none');
+    const headline2 = hasResults ? (clear ? 'The 95% confidence intervals do not overlap, so this difference is very unlikely to be luck. ' : 'The confidence intervals overlap, so treat this difference as uncertain; add more seeds. ') + 'Cheater advantage moves from ' + (cn.mean >= 0 ? '+' : '') + cn.mean.toFixed(0) + '% to ' + (cb.mean >= 0 ? '+' : '') + cb.mean.toFixed(0) + '%.' : '';
+
+    const SCS = ['abundant', 'normal', 'shortage'];
+    const cellMeans = {}; let cmin = Infinity, cmax = -Infinity;
+    conds.forEach(cd => SCS.forEach(x => { const q = stats(vals(x, cd.k, metric)); cellMeans[cd.k + x] = q; if (q.n) { cmin = Math.min(cmin, q.mean); cmax = Math.max(cmax, q.mean); } }));
+    const heat = conds.map(cd => ({
+      label: cd.label, color: cd.color,
+      cells: SCS.map(x => {
+        const q = cellMeans[cd.k + x];
+        let t = q.n && cmax > cmin ? (q.mean - cmin) / (cmax - cmin) : 0;
+        if (m.good < 0) t = 1 - t;
+        return { text: q.n ? m.fmt(q.mean) : '·', bg: 'rgba(45,212,167,' + (0.08 + 0.82 * t).toFixed(2) + ')', fg: t > 0.55 ? '#0B0E14' : '#E6EAF2', outline: x === sc ? '2px solid #E6EAF2' : 'none' };
+      })
+    }));
+
+    const ALLM = ['online', 'served', 'cheat', 'coop', 'gini'];
+    const colBest = {};
+    ALLM.forEach(mk => { let bv = null; conds.forEach(cd => { const q = stats(vals(sc, cd.k, mk)); if (q.n && (bv === null || MET[mk].good * (q.mean - bv) > 0)) bv = q.mean; }); colBest[mk] = bv; });
+    const table = conds.map(cd => ({
+      label: cd.label, color: cd.color,
+      cells: ALLM.map(mk => {
+        const q = stats(vals(sc, cd.k, mk));
+        const isBest = q.n && Math.abs(q.mean - colBest[mk]) < 1e-9;
+        return { text: q.n ? MET[mk].fmt(q.mean) + ' ± ' + MET[mk].ci(q.ci) : '–', fg: isBest ? '#2DD4A7' : '#E6EAF2', weight: isBest ? 700 : 400 };
+      })
+    }));
+
+    const pill = a => ({ bg: a ? '#E6EAF2' : 'transparent', fg: a ? '#0B0E14' : '#AEB6C6' });
+    const total = this.total || 0, done = this.done || 0;
+    return {
+      seeds: seeds, running: running, changeSeeds: e => set({ seeds: parseInt(e.target.value, 10) }),
+      run: () => { if (!running) this.startRun(seeds); },
+      runLabel: running ? 'Running…' : 'Run the experiment',
+      totalRuns: total, doneRuns: done, progress: total ? Math.round(100 * done / total) : 0,
+      hasResults: hasResults, headline: headline, headline2: headline2,
+      scName: SCN[sc].toUpperCase(), scNameLower: SCN[sc], nShown: st.none.n,
+      metrics: Object.keys(MET).map(k => Object.assign({ label: MET[k].label, active: metric === k, pick: () => set({ metric: k }) }, pill(metric === k))),
+      scTabs: SCS.map(k => Object.assign({ label: SCN[k], active: sc === k, pick: () => set({ sc: k }) }, pill(sc === k))),
+      chartTitle: m.title, chartSub: m.sub, axisTitle: m.axis,
+      rows: rows, ticks: ticks, baseX: X(base.mean).toFixed(2),
+      heat: heat, heatSub: m.label + ' by rule set and supply level (mean over seeds)',
+      table: table
+    };
+  }
+}
+</script>
+</body>
+</html>

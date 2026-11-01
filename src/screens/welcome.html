@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NashNet · Welcome</title>
+</head>
+<body>
+<x-screen>
+<x-head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+html{color-scheme:dark}
+body{margin:0;background:#0B0E14}
+*{scrollbar-width:thin;scrollbar-color:#2A3242 transparent}
+a{color:#AEB6C6}a:hover{color:#E6EAF2}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.4}
+button:focus-visible,a:focus-visible{outline:2px solid #6E8BFF;outline-offset:2px}
+</style>
+</x-head>
+<div style="min-height: 100vh; background: #0B0E14; color: #E6EAF2; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px">
+<div style="max-width: 1440px; margin: 0 auto; padding: 0 24px 56px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; padding: 18px 0; border-bottom: 1px solid #1E2635">
+  <div style="display: flex; align-items: center; gap: 12px">
+    <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; background: #E6EAF2; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#0B0E14" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="5" r="2.4"></circle><circle cx="15" cy="5" r="2.4"></circle><circle cx="10" cy="15" r="2.4"></circle><path d="M6.4 7.2l2.4 5.6M13.6 7.2l-2.4 5.6M7.6 5h4.8"></path></svg>
+    </div>
+    <div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.01em">NashNet</div>
+      <div style="font-size: 12px; color: #8A94A8">Compute Commons · multi-agent game theory testbed</div>
+    </div>
+  </div>
+  <nav aria-label="Views" style="display: flex; flex-wrap: wrap; gap: 4px; background: #121722; border: 1px solid #1E2635; border-radius: 12px; padding: 4px">
+    <a href="#/welcome" aria-current="page" style="padding: 10px 14px; border-radius: 8px; background: #E6EAF2; color: #0B0E14; text-decoration: none; font-weight: 600; font-size: 13px">0 · Welcome</a>
+    <a href="#/world" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">1 · World</a>
+    <a href="#/showdown" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">2 · Showdown</a>
+    <a href="#/lab" style="padding: 10px 14px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 13px">3 · Experiment Lab</a>
+  </nav>
+</header>
+
+<section style="display: flex; flex-wrap: wrap; gap: 32px; padding: 48px 0 40px; align-items: flex-start">
+  <div style="flex: 1 1 560px; min-width: 0">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">GAME THEORY IN MULTI-AGENT SYSTEMS</div>
+    <h1 style="margin: 14px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 52px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em">Can selfish AI agents share a scarce cloud without wrecking it?</h1>
+    <p style="margin: 18px 0 0; font-size: 18px; line-height: 1.6; color: #C4CAD6; max-width: 640px">NashNet drops 10 autonomous AI tenants into a city edge cloud with limited GPU, bandwidth and power. Each tenant decides for itself whether to share or cheat. We change the platform’s rules and measure what happens to everyone.</p>
+
+    <div style="margin-top: 28px; padding: 20px 22px; border-radius: 16px; background: #121722; border: 1px solid #2A3242">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #2DD4A7">THE GOAL</div>
+      <div style="margin-top: 6px; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; line-height: 1.3">Find the platform rule that keeps the most tenants online and makes cheating stop paying.</div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px">
+        <div style="padding: 12px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-weight: 600">Tenants online</div>
+          <div style="font-size: 13px; color: #8A94A8; margin-top: 2px">How many survive a 150-tick season (out of 10)</div>
+        </div>
+        <div style="padding: 12px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-weight: 600">Jobs served</div>
+          <div style="font-size: 13px; color: #8A94A8; margin-top: 2px">Share of incoming AI jobs that got computed</div>
+        </div>
+        <div style="padding: 12px; border-radius: 10px; background: #0B0E14; border: 1px solid #1E2635">
+          <div style="font-weight: 600">Does cheating pay?</div>
+          <div style="font-size: 13px; color: #8A94A8; margin-top: 2px">Selfish tenants’ earnings vs. cooperative tenants’</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px">
+      <a href="#/world" style="display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 24px; border-radius: 12px; background: #E6EAF2; color: #0B0E14; text-decoration: none; font-weight: 600; font-size: 16px">Start the guided demo →</a>
+      <a href="#/showdown" style="display: inline-flex; align-items: center; height: 52px; padding: 0 22px; border-radius: 12px; border: 1px solid #2A3242; color: #E6EAF2; text-decoration: none; font-weight: 500">Jump to the Policy Showdown</a>
+    </div>
+  </div>
+
+  <section aria-label="Try the dilemma" style="flex: 1 1 440px; min-width: 0; background: #121722; border: 1px solid #2A3242; border-radius: 20px; padding: 22px">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #8A94A8">TRY IT FIRST · 6 ROUNDS</div>
+    <h2 style="margin: 6px 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">You vs. a tenant</h2>
+    <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #AEB6C6">Sharing costs you <strong style="color: #E6EAF2">1 unit</strong> and gives your partner <strong style="color: #E6EAF2">3 units</strong> (spare capacity is worth more to someone who needs it). Keeping it costs nothing.</p>
+
+    <div style="margin-top: 16px">
+      <div style="font-size: 13px; color: #8A94A8; margin-bottom: 8px">Pick your opponent</div>
+      <div role="group" aria-label="Opponent" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+        <sc-for list="{{opps}}" as="op">
+          <button type="button" onClick="{{op.pick}}" aria-pressed="{{op.active}}" style="display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 8px 10px; border-radius: 10px; border: 1px solid {{op.border}}; background: {{op.bg}}; color: #E6EAF2; text-align: left">
+            <span style="width: 26px; height: 26px; flex: none; border-radius: 50%; background: {{op.color}}; color: #0B0E14; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12px; line-height: 26px; text-align: center">{{op.glyph}}</span>
+            <span style="font-size: 13px; line-height: 1.25"><span style="font-weight: 600">{{op.name}}</span><br><span style="color: #8A94A8; font-size: 11px">{{op.strat}}</span></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 18px">
+      <sc-for list="{{slots}}" as="sl">
+        <div style="padding: 8px 4px; border-radius: 10px; background: #0B0E14; border: 1px solid {{sl.border}}; text-align: center">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A94A8">R{{sl.n}}</div>
+          <div style="margin-top: 4px; font-size: 11px; color: #8A94A8">you</div>
+          <div style="font-weight: 600; font-size: 13px; color: {{sl.youColor}}">{{sl.you}}</div>
+          <div style="margin-top: 2px; font-size: 11px; color: #8A94A8">bot</div>
+          <div style="font-weight: 600; font-size: 13px; color: {{sl.botColor}}">{{sl.bot}}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px">
+      <button type="button" onClick="{{share}}" disabled="{{done}}" style="height: 56px; border-radius: 12px; border: 0; background: #2DD4A7; color: #0B0E14; font-weight: 700; font-size: 16px">Share <span style="font-weight: 500; font-size: 13px">(cooperate)</span></button>
+      <button type="button" onClick="{{keep}}" disabled="{{done}}" style="height: 56px; border-radius: 12px; border: 0; background: #FF6B4A; color: #0B0E14; font-weight: 700; font-size: 16px">Keep it <span style="font-weight: 500; font-size: 13px">(defect)</span></button>
+    </div>
+
+    <div style="display: flex; align-items: stretch; gap: 10px; margin-top: 16px">
+      <div style="flex: 1; padding: 12px; border-radius: 12px; background: #0B0E14; border: 1px solid #1E2635">
+        <div style="font-size: 12px; color: #8A94A8">Your score</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">{{you}}</div>
+      </div>
+      <div style="flex: 1; padding: 12px; border-radius: 12px; background: #0B0E14; border: 1px solid #1E2635">
+        <div style="font-size: 12px; color: #8A94A8">Bot’s score</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">{{bot}}</div>
+      </div>
+      <div style="flex: 1.2; padding: 12px; border-radius: 12px; background: rgba(45,212,167,0.08); border: 1px solid rgba(45,212,167,0.3)">
+        <div style="font-size: 12px; color: #8A94A8">If both always share</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #2DD4A7">12 <span style="font-size: 14px; font-weight: 500">each</span></div>
+      </div>
+    </div>
+    <p style="margin: 14px 0 0; min-height: 48px; font-size: 14px; line-height: 1.5; color: #D4D9E3">{{msg}}</p>
+    <button type="button" onClick="{{reset}}" style="margin-top: 6px; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #2A3242; background: transparent; color: #AEB6C6; font-size: 13px">Play again</button>
+  </section>
+</section>
+
+<section aria-label="The problem" style="padding: 32px 0; border-top: 1px solid #1E2635">
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">THE PROBLEM IN THREE STEPS</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px">
+    <div style="background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+      <svg width="100%" height="120" viewBox="0 0 300 120" role="img" aria-label="A grid with GPU, bandwidth and power tiles and a few tenants">
+        <rect x="0" y="0" width="300" height="120" rx="10" fill="#0E131C"></rect>
+        <rect x="30" y="20" width="26" height="26" rx="5" fill="rgba(233,162,59,0.55)" stroke="#E9A23B"></rect>
+        <rect x="140" y="64" width="26" height="26" rx="5" fill="rgba(56,189,248,0.55)" stroke="#38BDF8"></rect>
+        <rect x="240" y="26" width="26" height="26" rx="5" fill="rgba(155,225,93,0.55)" stroke="#9BE15D"></rect>
+        <circle cx="90" cy="70" r="11" fill="#6E8BFF"></circle><circle cx="200" cy="40" r="11" fill="#FF6B4A"></circle><circle cx="250" cy="92" r="11" fill="#2DD4A7"></circle><circle cx="60" cy="96" r="11" fill="#C08BFF"></circle>
+      </svg>
+      <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">01</div>
+      <h3 style="margin: 4px 0 6px; font-family: 'Space Grotesk', sans-serif; font-size: 20px">A shared cloud</h3>
+      <p style="margin: 0; line-height: 1.55; color: #AEB6C6">Every AI job needs GPU, bandwidth and power. They come from shared zones spread across the city, and zones only regrow slowly.</p>
+    </div>
+    <div style="background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+      <svg width="100%" height="120" viewBox="0 0 300 120" role="img" aria-label="Two tenants: sharing gives both plus two, cheating gives the cheater plus three and the victim minus one">
+        <rect x="0" y="0" width="300" height="120" rx="10" fill="#0E131C"></rect>
+        <circle cx="60" cy="60" r="20" fill="#6E8BFF"></circle><circle cx="240" cy="60" r="20" fill="#FF6B4A"></circle>
+        <path d="M86 48h128" stroke="#2DD4A7" stroke-width="3"></path><path d="M206 42l10 6-10 6" fill="none" stroke="#2DD4A7" stroke-width="3"></path>
+        <path d="M214 74H86" stroke="#5C667A" stroke-width="3" stroke-dasharray="6 6"></path>
+        <text x="150" y="38" fill="#2DD4A7" font-size="13" text-anchor="middle" font-family="JetBrains Mono, monospace">shares 1 → gets 3</text>
+        <text x="150" y="98" fill="#FF8A6B" font-size="13" text-anchor="middle" font-family="JetBrains Mono, monospace">gives nothing back</text>
+      </svg>
+      <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">02</div>
+      <h3 style="margin: 4px 0 6px; font-family: 'Space Grotesk', sans-serif; font-size: 20px">The temptation to cheat</h3>
+      <p style="margin: 0; line-height: 1.55; color: #AEB6C6">Sharing makes both sides better off (+2 each). But taking without giving wins any single round (+3 vs −1). That is the Prisoner’s Dilemma.</p>
+    </div>
+    <div style="background: #121722; border: 1px solid #1E2635; border-radius: 16px; padding: 20px">
+      <svg width="100%" height="120" viewBox="0 0 300 120" role="img" aria-label="A zone reserve bar falling below the safe line">
+        <rect x="0" y="0" width="300" height="120" rx="10" fill="#0E131C"></rect>
+        <rect x="40" y="20" width="40" height="80" rx="6" fill="#1E2635"></rect><rect x="40" y="30" width="40" height="70" rx="6" fill="rgba(155,225,93,0.6)"></rect>
+        <rect x="130" y="20" width="40" height="80" rx="6" fill="#1E2635"></rect><rect x="130" y="62" width="40" height="38" rx="6" fill="rgba(233,162,59,0.6)"></rect>
+        <rect x="220" y="20" width="40" height="80" rx="6" fill="#1E2635"></rect><rect x="220" y="90" width="40" height="10" rx="4" fill="rgba(255,107,74,0.7)"></rect>
+        <path d="M24 68h252" stroke="#E6EAF2" stroke-dasharray="4 4"></path>
+        <text x="276" y="62" fill="#AEB6C6" font-size="11" text-anchor="end" font-family="JetBrains Mono, monospace">safe reserve 40%</text>
+      </svg>
+      <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">03</div>
+      <h3 style="margin: 4px 0 6px; font-family: 'Space Grotesk', sans-serif; font-size: 20px">The tragedy of the commons</h3>
+      <p style="margin: 0; line-height: 1.55; color: #AEB6C6">Hoarders drain zones below their safe reserve. A drained zone regrows slowly, so everyone starves, and tenants start going offline.</p>
+    </div>
+  </div>
+</section>
+
+<section aria-label="Meet the tenants" style="padding: 32px 0; border-top: 1px solid #1E2635">
+  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">MEET THE 10 TENANTS · 6 STRATEGIES</div>
+    <div style="margin-left: auto; display: flex; gap: 14px; font-size: 13px; color: #AEB6C6">
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2DD4A7"></span>Cooperative team</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #FF6B4A"></span>Selfish team</span>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 16px">
+    <sc-for list="{{cast}}" as="c">
+      <div style="background: #121722; border: 1px solid #1E2635; border-top: 3px solid {{c.teamColor}}; border-radius: 14px; padding: 16px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span style="width: 36px; height: 36px; border-radius: 50%; background: {{c.color}}; color: #0B0E14; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 15px; line-height: 36px; text-align: center">{{c.glyph}}</span>
+          <div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700">The {{c.short}}</div>
+            <div style="font-size: 12px; color: #8A94A8">{{c.name}} · {{c.ids}}</div>
+          </div>
+        </div>
+        <p style="margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: #C4CAD6">{{c.blurb}}</p>
+        <div style="margin-top: 10px; display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: {{c.teamBg}}; color: {{c.teamColor}}">{{c.team}}</div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; padding: 32px 0; border-top: 1px solid #1E2635">
+  <div aria-label="How to read the map" style="flex: 1 1 420px; min-width: 0">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">HOW TO READ THE MAP</div>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px">
+      <div style="display: flex; align-items: center; gap: 14px"><span style="position: relative; width: 26px; height: 26px; flex: none; box-sizing: border-box; border-radius: 6px; border: 1px solid #E9A23B; background: rgba(233,162,59,0.1); overflow: hidden"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background: rgba(233,162,59,0.6)"></span></span><span><strong>Zone tile.</strong> <span style="color: #AEB6C6">Amber GPU, blue bandwidth, green power. The fill shows how much is left.</span></span></div>
+      <div style="display: flex; align-items: center; gap: 14px"><span style="width: 26px; height: 26px; flex: none; border-radius: 50%; background: #6E8BFF; color: #0B0E14; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12px; line-height: 26px; text-align: center">T</span><span><strong>Tenant.</strong> <span style="color: #AEB6C6">Colour and letter = strategy. Click one to inspect it.</span></span></div>
+      <div style="display: flex; align-items: center; gap: 14px"><span style="width: 26px; height: 3px; flex: none; background: #2DD4A7"></span><span><strong>Green line.</strong> <span style="color: #AEB6C6">Two tenants just shared or swapped capacity.</span></span></div>
+      <div style="display: flex; align-items: center; gap: 14px"><span style="width: 26px; height: 3px; flex: none; background: #FF6B4A"></span><span><strong>Orange line.</strong> <span style="color: #AEB6C6">Someone cheated, refused or grabbed.</span></span></div>
+      <div style="display: flex; align-items: center; gap: 14px"><span style="width: 26px; height: 26px; flex: none; box-sizing: border-box; border: 1px dashed #AEB6C6; border-radius: 6px"></span><span><strong>Dashed square.</strong> <span style="color: #AEB6C6">Who the selected tenant can see and meet (3 cells).</span></span></div>
+      <div style="display: flex; align-items: center; gap: 14px"><span style="width: 26px; height: 26px; flex: none; border-radius: 50%; background: #2A3242; color: #7D8799; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 26px; text-align: center">×</span><span><strong>Grey tenant.</strong> <span style="color: #AEB6C6">Offline: it ran out of resources.</span></span></div>
+    </div>
+  </div>
+  <div aria-label="Rules the platform can switch on" style="flex: 1 1 520px; min-width: 0">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">RULES THE PLATFORM CAN SWITCH ON</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 16px">
+      <div style="padding: 14px; border-radius: 12px; background: #121722; border: 1px solid #1E2635"><div style="font-weight: 600">Memory</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Tenants remember who cheated them.</div><div style="font-size: 12px; color: #9DB0FF; margin-top: 8px">Targets: cheating in trades</div></div>
+      <div style="padding: 14px; border-radius: 12px; background: #121722; border: 1px solid #1E2635"><div style="font-weight: 600">Reputation ledger</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">A public trust score everyone can check.</div><div style="font-size: 12px; color: #9DB0FF; margin-top: 8px">Targets: cheating in trades</div></div>
+      <div style="padding: 14px; border-radius: 12px; background: #121722; border: 1px solid #1E2635"><div style="font-weight: 600">Commons quotas</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Nobody may take more than 3 units or drain a zone below 40%.</div><div style="font-size: 12px; color: #F2B862; margin-top: 8px">Targets: draining the commons</div></div>
+      <div style="padding: 14px; border-radius: 12px; background: #121722; border: 1px solid #1E2635"><div style="font-weight: 600">Congestion pricing</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Taking from a nearly empty zone costs extra credits.</div><div style="font-size: 12px; color: #F2B862; margin-top: 8px">Targets: draining the commons</div></div>
+      <div style="padding: 14px; border-radius: 12px; background: #121722; border: 1px solid #1E2635"><div style="font-weight: 600">Random audits</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">40% chance to catch a cheat or over-drain: fine plus repayment.</div><div style="font-size: 12px; color: #2DD4A7; margin-top: 8px">Targets: both problems</div></div>
+    </div>
+  </div>
+</section>
+
+<section aria-label="One tick" style="padding: 32px 0; border-top: 1px solid #1E2635">
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">WHAT HAPPENS IN ONE TICK</div>
+  <div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin-top: 16px">
+    <div style="flex: 1 1 180px; padding: 16px; border-radius: 14px; background: #121722; border: 1px solid #1E2635"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">1</div><div style="font-weight: 600; font-size: 17px">Observe</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Each tenant sees only its 3-cell neighbourhood.</div></div>
+    <div aria-hidden="true" style="align-self: center; color: #5C667A; font-size: 20px">→</div>
+    <div style="flex: 1 1 180px; padding: 16px; border-radius: 14px; background: #121722; border: 1px solid #1E2635"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">2</div><div style="font-weight: 600; font-size: 17px">Evaluate</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">It scores each possible action by expected utility.</div></div>
+    <div aria-hidden="true" style="align-self: center; color: #5C667A; font-size: 20px">→</div>
+    <div style="flex: 1 1 180px; padding: 16px; border-radius: 14px; background: #121722; border: 1px solid #1E2635"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">3</div><div style="font-weight: 600; font-size: 17px">Choose</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Its strategy decides: share, cheat, swap or grab.</div></div>
+    <div aria-hidden="true" style="align-self: center; color: #5C667A; font-size: 20px">→</div>
+    <div style="flex: 1 1 180px; padding: 16px; border-radius: 14px; background: #121722; border: 1px solid #1E2635"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">4</div><div style="font-weight: 600; font-size: 17px">Interact</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Resources move; the platform’s rules apply.</div></div>
+    <div aria-hidden="true" style="align-self: center; color: #5C667A; font-size: 20px">→</div>
+    <div style="flex: 1 1 180px; padding: 16px; border-radius: 14px; background: #121722; border: 1px solid #1E2635"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">5</div><div style="font-weight: 600; font-size: 17px">Update</div><div style="font-size: 13px; color: #AEB6C6; margin-top: 4px">Memory, reputation and the event log are written.</div></div>
+  </div>
+</section>
+
+<section aria-label="Demo script" style="padding: 32px 0 0; border-top: 1px solid #1E2635">
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #8A94A8">THE 5-MINUTE DEMO SCRIPT</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 16px">
+    <sc-for list="{{script}}" as="s">
+      <a href="{{s.href}}" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; background: #121722; border: 1px solid #1E2635; text-decoration: none; color: #E6EAF2">
+        <span style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 50%; background: #E6EAF2; color: #0B0E14; font-weight: 700; font-size: 13px; line-height: 28px; text-align: center">{{s.n}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A94A8">{{s.time}}</span></span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700">{{s.title}}</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #AEB6C6">{{s.say}}</span>
+        <span style="margin-top: auto; font-size: 13px; color: #9DB0FF">Open {{s.screen}} →</span>
+      </a>
+    </sc-for>
+  </div>
+  <p style="margin: 24px 0 0; font-size: 13px; color: #8A94A8">Runs entirely in the browser (JavaScript engine, no backend). Every run is reproducible from its seed.</p>
+</section>
+
+</div>
+</div>
+</x-screen>
+<script type="text/x-screen">
+class Component extends Screen {
+  renderVals() {
+    const s = this.state || {};
+    const opp = s.opp || 'TFT';
+    const rounds = s.rounds || [];
+    const set = p => this.setState(p);
+    const OPP = {
+      TFT: { name: 'The Mirror', strat: 'Tit-for-Tat', glyph: 'T', color: '#6E8BFF' },
+      ALLC: { name: 'The Giver', strat: 'Always Cooperate', glyph: 'C', color: '#2DD4A7' },
+      ALLD: { name: 'The Hoarder', strat: 'Always Defect', glyph: 'D', color: '#FF6B4A' }
+    };
+    const botMove = () => opp === 'ALLC' ? 'S' : opp === 'ALLD' ? 'K' : (rounds.length ? rounds[rounds.length - 1].you : 'S');
+    let you = 0, bot = 0;
+    rounds.forEach(r => {
+      if (r.you === 'S') { you -= 1; bot += 3; }
+      if (r.bot === 'S') { bot -= 1; you += 3; }
+    });
+    const done = rounds.length >= 6;
+    const play = m => {
+      if (done) return;
+      set({ rounds: rounds.concat([{ you: m, bot: botMove() }]) });
+    };
+    let msg;
+    if (!rounds.length) msg = 'Make your first move. The bot moves at the same time.';
+    else if (!done) {
+      const r = rounds[rounds.length - 1];
+      const nm = OPP[opp].name;
+      if (r.you === 'S' && r.bot === 'S') msg = 'You both shared: +2 each. This is the cooperative outcome.';
+      else if (r.you === 'K' && r.bot === 'S') msg = 'You kept yours while ' + nm + ' shared: +3 for you, −1 for it.' + (opp === 'TFT' ? ' It will remember that next round.' : '');
+      else if (r.you === 'S' && r.bot === 'K') msg = 'You shared, ' + nm + ' kept its capacity: −1 for you, +3 for it.';
+      else msg = 'Nobody shared. Nobody gains: 0 each.';
+    } else {
+      if (opp === 'TFT') msg = you >= 10 ? 'Mirror rewards you for sharing: cooperation pays when you meet again. This is why memory matters.' : 'Every time you cheated, the Mirror cheated back. Exploiting a reciprocator stops paying after round one.';
+      else if (opp === 'ALLC') msg = you > 12 ? 'Exploiting the Giver earns you more, but only because it never fights back. In the simulation, Givers are the first to go offline.' : 'You and the Giver both did well. Cooperation is easy against someone who never cheats.';
+      else msg = 'Against the Hoarder, sharing is just a loss. That is why tenants need a way to recognise cheaters.';
+    }
+    const opps = Object.keys(OPP).map(k => ({
+      name: OPP[k].name, strat: OPP[k].strat, glyph: OPP[k].glyph, color: OPP[k].color, active: opp === k,
+      bg: opp === k ? 'rgba(230,234,242,0.08)' : '#0B0E14', border: opp === k ? '#AEB6C6' : '#1E2635',
+      pick: () => set({ opp: k, rounds: [] })
+    }));
+    const slots = [];
+    for (let i = 0; i < 6; i++) {
+      const r = rounds[i];
+      slots.push({
+        n: i + 1,
+        you: r ? (r.you === 'S' ? 'Share' : 'Keep') : '·',
+        bot: r ? (r.bot === 'S' ? 'Share' : 'Keep') : '·',
+        youColor: r ? (r.you === 'S' ? '#2DD4A7' : '#FF8A6B') : '#5C667A',
+        botColor: r ? (r.bot === 'S' ? '#2DD4A7' : '#FF8A6B') : '#5C667A',
+        border: i === rounds.length && !done ? '#AEB6C6' : '#1E2635'
+      });
+    }
+    const cast = [
+      { glyph: 'T', color: '#6E8BFF', short: 'Mirror', name: 'Tit-for-Tat', ids: 'A1, A2', blurb: 'Shares on first contact, then copies whatever you did to it last time.', team: 'Cooperative', coop: true },
+      { glyph: 'C', color: '#2DD4A7', short: 'Giver', name: 'Always Cooperate', ids: 'A5, A6', blurb: 'Always shares spare capacity, even with tenants who cheat it.', team: 'Cooperative', coop: true },
+      { glyph: '$', color: '#C08BFF', short: 'Trader', name: 'Trader', ids: 'A7, A8', blurb: 'Swaps capacity only with partners it trusts at least a little.', team: 'Cooperative', coop: true },
+      { glyph: 'R', color: '#E8ECF4', short: 'Checker', name: 'Reputation-aware', ids: 'A10', blurb: 'Looks up a partner’s reputation before deciding to cooperate.', team: 'Cooperative', coop: true },
+      { glyph: 'D', color: '#FF6B4A', short: 'Hoarder', name: 'Always Defect', ids: 'A3, A4', blurb: 'Accepts what others offer, gives nothing back, and over-drains zones.', team: 'Selfish', coop: false },
+      { glyph: 'A', color: '#FF4D8D', short: 'Grabber', name: 'Aggressive', ids: 'A9', blurb: 'Tries to take other tenants’ capacity by force, and over-drains zones.', team: 'Selfish', coop: false }
+    ].map(c => Object.assign(c, { teamColor: c.coop ? '#2DD4A7' : '#FF6B4A', teamBg: c.coop ? 'rgba(45,212,167,0.12)' : 'rgba(255,107,74,0.12)' }));
+    const script = [
+      { n: 1, time: '0:30', title: 'Frame the problem', say: 'Play 3 rounds of the mini-game above against the Mirror. That is the dilemma every tenant faces.', href: '#/welcome', screen: 'Welcome' },
+      { n: 2, time: '1:30', title: 'Watch the commons fail', say: 'In World, keep “No rules” and press Play. Watch the live leaderboard: Hoarders climb to the top while Givers drop offline.', href: '#/world', screen: 'World' },
+      { n: 3, time: '1:00', title: 'Explain one decision', say: 'Pause, click a tenant, read its trust list and its next move. Then step one tick.', href: '#/world', screen: 'World' },
+      { n: 4, time: '1:30', title: 'Race the rule sets', say: 'In the Showdown, run the same world under four rule sets side by side and read the final ranking.', href: '#/showdown', screen: 'Showdown' },
+      { n: 5, time: '0:45', title: 'Prove it with statistics', say: 'In the Experiment Lab, run hundreds of seeds and show the confidence intervals and the scarcity heatmap.', href: '#/lab', screen: 'Experiment Lab' }
+    ];
+    return {
+      opps: opps, slots: slots, you: you, bot: bot, done: done, msg: msg,
+      share: () => play('S'), keep: () => play('K'), reset: () => set({ rounds: [] }),
+      cast: cast, script: script
+    };
+  }
+}
+</script>
+</body>
+</html>
